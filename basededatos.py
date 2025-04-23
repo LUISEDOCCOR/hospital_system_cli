@@ -53,6 +53,7 @@ class Basededatos:
                     break
             #Escribimos el archivo con el nuevo contenido
             self.__escribir_archivo(contenido)
+            return True
         except:
             return False
 
@@ -62,6 +63,9 @@ class Basededatos:
             #EL nuevo contenido son todos los elemntos, menos el que tenga el mismo id que se paso de parametro
             nuevo_contenido = [elemento for elemento in contenido if elemento["id"] != id]
             self.__escribir_archivo(nuevo_contenido)
+            #Si la longitud de ambos es igual esto significa que no se elimino ningun elemento
+            if len(contenido) == len(nuevo_contenido):
+                return False
             return True
         except:
             return False
@@ -76,5 +80,7 @@ class Basededatos:
         except:
             return False
 
-    def obtener_todos(self):
-        return self.__leer_archivo()
+    def obtener_por_clave_valor(self, key: str, value: str):
+        contenido = self.__leer_archivo()
+        contendio_buscado = [elemento for elemento in contenido if elemento[key] == value]
+        return contendio_buscado
