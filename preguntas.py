@@ -45,7 +45,7 @@ pregutas_paciente = preguntas_personas + [
     }
 ]
 
-def preguntas_persona_editar (valores_default):
+def preguntas_persona_editar (valores_default: dict):
     nuevas_preguntas = deepcopy(preguntas_personas)
     for pregunta in nuevas_preguntas:
         pregunta["default"] = valores_default[pregunta["name"]]

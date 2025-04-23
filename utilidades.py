@@ -2,12 +2,15 @@ import os, platform, shutil, time
 from InquirerPy.utils import color_print
 
 def limpiar_consola():
+   #Si el nombre del sistema operativo es windows ejecutamos el comando cls
     if platform.system() == "Windows":
         os.system("cls")
+    #Si no lo es ejecutamos el comando clear
     else:
         os.system("clear")
 
 def centrar_texto(texto: str):
+    #retornamos el texto, usamos el metodo center, que pide como argumento las columnas de la terminal
     return texto.center(shutil.get_terminal_size().columns)
 
 def alerta_exito(mensaje: str):

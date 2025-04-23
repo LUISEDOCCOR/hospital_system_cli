@@ -60,7 +60,7 @@ class Basededatos:
     def eliminar(self, id: str):
         try:
             contenido = self.__leer_archivo()
-            #EL nuevo contenido son todos los elemntos, menos el que tenga el mismo id que se paso de parametro
+            #EL nuevo contenido son todos los elemntos, menos el que tenga el mismo id que se paso de parámetro
             nuevo_contenido = [elemento for elemento in contenido if elemento["id"] != id]
             self.__escribir_archivo(nuevo_contenido)
             #Si la longitud de ambos es igual esto significa que no se elimino ningun elemento
@@ -74,13 +74,14 @@ class Basededatos:
         try:
             contenido = self.__leer_archivo()
             for elemento in contenido:
-                #retornamos el elemnto que tenga el mismo id que se paso como parametro
+                #retornamos el elemnto que tenga el mismo id que se paso como parámetro
                 if elemento["id"] == id:
                     return elemento
         except:
             return False
 
-    def obtener_por_clave_valor(self, key: str, value: str):
+    def obtener_por_clave_valor(self, clave: str, valor: str):
         contenido = self.__leer_archivo()
-        contendio_buscado = [elemento for elemento in contenido if elemento[key] == value]
+        #guardamos todos los elementos cuyo valor en la clave especificada coincida con el valor buscado
+        contendio_buscado = [elemento for elemento in contenido if elemento[clave] == valor]
         return contendio_buscado
