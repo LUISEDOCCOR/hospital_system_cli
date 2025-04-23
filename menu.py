@@ -4,7 +4,7 @@ from InquirerPy import inquirer, prompt
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 import time
-from utilidades import limpiar_consola, centrar_texto, alerta_exito, alerta_error
+from utilidades import limpiar_consola, centrar_texto, alerta_exito, alerta_error, alerta_confirmar
 from preguntas import pregutas_doctor, pregutas_paciente, preguntas_persona_editar
 from personas import Doctor, Persona, Paciente
 
@@ -30,10 +30,12 @@ def menu_personas(tipo: str):
                 exitoso = None
                 if tipo == "doctor":
                     respuestas = prompt(pregutas_doctor)
-                    exitoso = Doctor(**respuestas).crear()
+                    if alerta_confirmar():
+                        exitoso = Doctor(**respuestas).crear()
                 else:
                     respuestas = prompt(pregutas_paciente)
-                    exitoso = Paciente(**respuestas).crear()
+                    if alerta_confirmar():
+                        exitoso = Paciente(**respuestas).crear()
                 if exitoso:
                     alerta_exito("Creado correctamente")
                 else:
@@ -47,10 +49,11 @@ def menu_personas(tipo: str):
                 persona = Persona.obtener_por_id(id)
                 if persona:
                     respuestas = prompt(preguntas_persona_editar(persona))
-                    if Persona.editar(id, respuestas):
-                        alerta_exito("Editado correctamente")
-                    else:
-                        alerta_error()
+                    if alerta_confirmar():
+                        if Persona.editar(id, respuestas):
+                            alerta_exito("Editado correctamente")
+                        else:
+                            alerta_error()
                 else:
                     alerta_error(f"No se encontro el {tipo}")
             #Borrar
@@ -59,10 +62,11 @@ def menu_personas(tipo: str):
                     message = f"Selecciona el nombre del {tipo} que deseas borrar:",
                     choices=[Choice(value=elemento["id"], name=elemento["nombre"]) for elemento in datos]
                 ).execute()
-                if Persona.eliminar(id):
-                    alerta_exito("Eliminado correctamente")
-                else:
-                    alerta_error()
+                if alerta_confirmar():
+                    if Persona.eliminar(id):
+                        alerta_exito("Eliminado correctamente")
+                    else:
+                        alerta_error()
             #Obtener Todos
             case 4:
                 for elemento in datos:

@@ -1,5 +1,6 @@
 import os, platform, shutil, time
 from InquirerPy.utils import color_print
+from InquirerPy import inquirer
 
 def limpiar_consola():
    #Si el nombre del sistema operativo es windows ejecutamos el comando cls
@@ -20,3 +21,6 @@ def alerta_exito(mensaje: str):
 def alerta_error(mensaje="Hubo un error"):
     color_print([("bold fg:#ff4c4c", f"\n❌ {mensaje}\n")])
     time.sleep(1.5)
+
+def alerta_confirmar():
+    return inquirer.confirm(message="Guradar cambios?", default=True).execute()
