@@ -130,8 +130,8 @@ def menu_evento_medico():
         input("Enter para continuar... ")
 
 def menu_añadir_evento_medico(tipo: str):
-    doctor_id = selecciona_elemento(Doctor.obtener_todos(), "Selecciona a un Doctor")
-    paciente_id = selecciona_elemento(Paciente.obtener_todos(), "Seleccionar a un Paciente")
+    doctor_id = selecciona_elemento_personas(Doctor.obtener_todos(), "Selecciona a un Doctor")
+    paciente_id = selecciona_elemento_personas(Paciente.obtener_todos(), "Seleccionar a un Paciente")
     if doctor_id and paciente_id:
         respuestas = prompt(preguntas_cita_medica if tipo == "cita" else preguntas_consulta_medica)
         respuestas["doctor_id"] = doctor_id
