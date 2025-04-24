@@ -40,6 +40,7 @@ class Consulta(EventoMedico):
         super().__init__(paciente_id=paciente_id, doctor_id=doctor_id, motivo=motivo, fecha=(date.today().isoformat()), tipo="consulta")
         self.diagnostico = diagnostico
 
+    @classmethod
     def obtener_todos(cls, tipo=None):
         return super().obtener_todos("consulta")
 
@@ -57,6 +58,7 @@ class Cita(EventoMedico):
         self.estado = estado
         self.detalles = detalles
 
+    @classmethod
     def obtener_todos(cls, tipo=None):
         return super().obtener_todos("cita")
 

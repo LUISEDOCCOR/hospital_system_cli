@@ -75,10 +75,11 @@ class Doctor(Persona):
         return self.bd.crear(datos)
 
 class Paciente(Persona):
-    def __init__(self, nombre, edad, correo, celular, genero, notas, estatura):
+    def __init__(self, nombre, edad, correo, celular, genero, notas, estatura, peso):
         super().__init__(nombre, edad, correo, celular, genero, tipo="paciente")
         self.notas = notas
         self.estatura = estatura
+        self.peso = peso
 
     @classmethod
     def obtener_todos(cls, tipo=None):
@@ -88,4 +89,5 @@ class Paciente(Persona):
         datos = self.construir_datos()
         datos["notas"] = fill(self.notas, 15) #A partir del carácter 15 cambiamos de linea (damos enter)
         datos["estatura"] = self.estatura
+        datos["peso"] = self.peso
         return self.bd.crear(datos)

@@ -3,6 +3,7 @@ from InquirerPy.utils import color_print
 from InquirerPy import inquirer
 from InquirerPy.base.control import Choice
 from tabulate import tabulate
+from personas import Doctor, Paciente
 
 def limpiar_consola():
    #Si el nombre del sistema operativo es windows ejecutamos el comando cls
@@ -27,11 +28,23 @@ def alerta_error(mensaje="Hubo un error"):
 def alerta_confirmar(mensaje="Guradar cambios?"):
     return inquirer.confirm(message=mensaje, default=True).execute()
 
-def selecciona_elemento(datos: list, mensaje: str):
+def selecciona_elemento_personas(datos: list, mensaje: str):
     if len(datos) > 0:
         return inquirer.fuzzy(
             message = mensaje,
             choices=[Choice(value=elemento["id"], name=elemento["nombre"]) for elemento in datos]
+        ).execute()
+    else:
+        alerta_error("No hay ningun elemento para realizar esta accion")
+
+def selecciona_elemento_eventomedico(datos: list, tipo: str):
+    if len(datos) > 0:
+        return inquirer.fuzzy(
+            message = f"Selecciona una {tipo}",
+            choices=[Choice(value=elemento["id"], 
+                name=f"🥼 Doctor: {Doctor.obtener_por_id(elemento["doctor_id"])["nombre"]} 👤 Paciente: {Paciente.obtener_por_id(elemento["paciente_id"])["nombre"]} 📆 Fecha: {elemento["fecha"]}") 
+                for elemento in datos
+            ]
         ).execute()
     else:
         alerta_error("No hay ningun elemento para realizar esta accion")

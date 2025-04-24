@@ -47,6 +47,11 @@ pregutas_paciente = preguntas_personas + [
         "type": "input",
         "message": "📏 Estatura (CM):",
         "name": "estatura"
+    },
+    {
+        "type": "input",
+        "message": "🧭 Peso (KG):",
+        "name": "peso"
     }
 ]
 
@@ -75,8 +80,14 @@ preguntas_cita_medica = pregutnas_evento_medico + [
 
 preguntas_consulta_medica = deepcopy(pregutnas_evento_medico) 
 
-def preguntas_persona_editar (valores_default: dict):
-    nuevas_preguntas = deepcopy(preguntas_personas)
+def preguntas_persona_editar (valores_default: dict, tipo):
+    nuevas_preguntas = deepcopy(pregutas_doctor if tipo == "doctor" else pregutas_paciente)
+    for pregunta in nuevas_preguntas:
+        pregunta["default"] = valores_default[pregunta["name"]]
+    return nuevas_preguntas
+
+def preguntas_eventomedico_editar (valores_default: dict, tipo):
+    nuevas_preguntas = deepcopy(preguntas_cita_medica if tipo == "cita" else preguntas_consulta_medica)
     for pregunta in nuevas_preguntas:
         pregunta["default"] = valores_default[pregunta["name"]]
     return nuevas_preguntas
