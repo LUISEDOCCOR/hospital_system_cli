@@ -1,5 +1,7 @@
 # Del archivo basededatos.py importamos la clase Basededatos
 from basededatos import Basededatos
+#Importamos esta libreia que nos ayudara a convertir un texto de una sola linea en varias
+from textwrap import fill
 
 class Persona:
     #Creamos una instancia de la clase basededatos y la llamamos bd
@@ -73,9 +75,10 @@ class Doctor(Persona):
         return self.bd.crear(datos)
 
 class Paciente(Persona):
-    def __init__(self, nombre, edad, correo, celular, genero, notas):
+    def __init__(self, nombre, edad, correo, celular, genero, notas, estatura):
         super().__init__(nombre, edad, correo, celular, genero, tipo="paciente")
         self.notas = notas
+        self.estatura = estatura
 
     @classmethod
     def obtener_todos(cls, tipo=None):
@@ -83,5 +86,6 @@ class Paciente(Persona):
 
     def crear (self):
         datos = self.construir_datos()
-        datos["notas"] = self.notas
+        datos["notas"] = fill(self.notas, 15) #A partir del carácter 15 cambiamos de linea (damos enter)
+        datos["estatura"] = self.estatura
         return self.bd.crear(datos)

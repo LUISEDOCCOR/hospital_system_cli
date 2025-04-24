@@ -4,9 +4,12 @@ from InquirerPy import inquirer, prompt
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 import time
-from utilidades import limpiar_consola, centrar_texto, alerta_exito, alerta_error, alerta_confirmar
-from preguntas import pregutas_doctor, pregutas_paciente, preguntas_persona_editar
+from tabulate import tabulate
+from utilidades import limpiar_consola, centrar_texto, alerta_exito, alerta_error, alerta_confirmar, selecciona_elemento, mostar_tabla
+from preguntas import pregutas_doctor, pregutas_paciente, preguntas_persona_editar, preguntas_cita_medica
 from personas import Doctor, Persona, Paciente
+from eventomedico import Cita
+from ia import ia_asistente_medico
 
 def menu_personas(tipo: str):
     while True:
@@ -19,10 +22,12 @@ def menu_personas(tipo: str):
                 Choice(value=3, name="❌ Borrar"),
                 Choice(value=4, name="📋 Ver todos"),
                 Choice(value=5, name="🪪 Ficha"),
-                Choice(value=6, name="⬅️ Volver")
+                Choice(value=None, name="⬅️ Volver")
             ],
             default=1
         ).execute()
+        if not accion:
+            break
         datos = Doctor.obtener_todos() if tipo == "doctor" else Paciente.obtener_todos()
         match accion:
             #Crear
@@ -42,10 +47,7 @@ def menu_personas(tipo: str):
                     alerta_error()
             #Editar
             case 2:
-                id = inquirer.fuzzy(
-                    message = f"Selecciona el nombre del {tipo} que deseas editar:",
-                    choices=[Choice(value=elemento["id"], name=elemento["nombre"]) for elemento in datos]
-                ).execute()
+                id = selecciona_elemento(datos, f"Selecciona el nombre del {tipo} que deseas editar:")
                 persona = Persona.obtener_por_id(id)
                 if persona:
                     respuestas = prompt(preguntas_persona_editar(persona))
@@ -58,10 +60,7 @@ def menu_personas(tipo: str):
                     alerta_error(f"No se encontro el {tipo}")
             #Borrar
             case 3:
-                id = inquirer.fuzzy(
-                    message = f"Selecciona el nombre del {tipo} que deseas borrar:",
-                    choices=[Choice(value=elemento["id"], name=elemento["nombre"]) for elemento in datos]
-                ).execute()
+                id = selecciona_elemento(datos, f"Selecciona el nombre del {tipo} que deseas borrar:")
                 if alerta_confirmar():
                     if Persona.eliminar(id):
                         alerta_exito("Eliminado correctamente")
@@ -69,34 +68,44 @@ def menu_personas(tipo: str):
                         alerta_error()
             #Obtener Todos
             case 4:
-                for elemento in datos:
-                    for clave, valor in elemento.items():
-                        print(f"🔹 {clave.upper()}: {valor}")
-                    print("\n")
+                mostar_tabla(datos, tipo)
             #Ficha
             case 5:
-                id = inquirer.fuzzy(
-                    message = f"Selecciona el nombre del {tipo}:",
-                    choices=[Choice(value=elemento["id"], name=elemento["nombre"]) for elemento in datos]
-                ).execute()
-                print("\n")
+                id = selecciona_elemento(datos, f"Selecciona el nombre del {tipo}:")
                 persona = Persona.obtener_por_id(id)
                 if persona:
-                    for clave, valor in persona.items():
-                        print(f"🔹 {clave.upper()}: {valor}")
-                    print("\n")
+                    mostar_tabla([persona], tipo)
                 else:
                     alerta_error(f"No se encontro el {tipo}")
-            #Volver
-            case 6:
-                break
         input("Enter para continuar... ")
 
-def menu_citas():
-    print("Citas")
+def menu_agendar_cita():
+    doctor_id = selecciona_elemento(Doctor.obtener_todos(), "Selecciona a un Doctor")
+    paciente_id = selecciona_elemento(Paciente.obtener_todos(), "Seleccionar a un Paciente")
+    if doctor_id and paciente_id:
+        respuestas = prompt(preguntas_cita_medica)
+        respuestas["doctor_id"] = doctor_id
+        respuestas["paciente_id"] = paciente_id
+        if alerta_confirmar("Usar IA para los detalles"):
+            respuestas["detalles"] = ia_asistente_medico(Paciente.obtener_por_id(paciente_id), respuestas["motivo"])
+            if alerta_confirmar("Agendar cita?"):
+                if Cita(**respuestas).crear():
+                    alerta_exito("Cita agendada correctamente")
+                    mostar_tabla([respuestas], "cita")
+                else:
+                    alerta_error()
+        else:
+            detalles = inquirer.text(message="Detalles de la cita: ").execute()
+            respuestas["detalles"] = detalles
+    else:
+        alerta_error("Es necesario que exista un doctor o paciente")
+
+    input("Enter para continuar... ")
+
 
 def menu_consultas():
     print("Consultas")
+    input("Enter para continuar... ")
 
 def inicio():
     limpiar_consola()
@@ -115,21 +124,22 @@ def mostrar_menu():
                 Choice(value=1, name="🥼 Doctores"),
                 Choice(value=2, name="👤 Pacientes"),
                 Separator(),
-                Choice(value=3, name="📕 Citas"),
-                Choice(value=4, name="📘 Consultas"),
+                Choice(value=3, name="📆 Agendar Cita"),
+                Choice(value=4, name="📁 Registrar Consulta"),
+                Choice(value=5, name="📕 Citas / Consultas"),
                 Separator(),
-                Choice(value=5, name="📤 Salir"),
+                Choice(value=None, name="📤 Salir"),
             ],
             default=1
         ).execute()
+        if not accion:
+            break
         match accion:
             case 1:
                 menu_personas("doctor")
             case 2:
                 menu_personas("paciente")
             case 3:
-                menu_citas()
+                menu_agendar_cita()
             case 4:
                 menu_consultas()
-            case 5:
-                break

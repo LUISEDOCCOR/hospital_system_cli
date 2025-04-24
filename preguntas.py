@@ -42,6 +42,33 @@ pregutas_paciente = preguntas_personas + [
         "type": "input",
         "message": "🧾 Notas:",
         "name": "notas"
+    },
+    {
+        "type": "input",
+        "message": "📏 Estatura (CM):",
+        "name": "estatura"
+    }
+]
+
+pregutnas_evento_medico = [
+    {
+        "type": "input",
+        "message": "📅 Fecha de la cita (YYYY-MM-DD):",
+        "name": "fecha"
+    },
+    {
+        "type": "input",
+        "message": "📝 Motivo de la cita:",
+        "name": "motivo"
+    }
+]
+
+preguntas_cita_medica = pregutnas_evento_medico + [
+    {
+        "type": "list",
+        "message": "📌 Estado de la cita:",
+        "choices": ["Pendiente", "Terminada"],
+        "name": "estado"
     }
 ]
 

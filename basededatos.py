@@ -23,8 +23,13 @@ class Basededatos:
             return json.load(archivo)
 
     def __escribir_archivo(self, contenido):
-        with open(self.archivo, "w") as archivo:
-            json.dump(contenido, archivo, indent=4)
+        try:
+            with open(self.archivo, "w") as archivo:
+                json.dump(contenido, archivo, indent=4)
+        except:
+            with open(self.archivo, "w") as archivo:
+                json.dump([], archivo)
+
 
     def crear(self, datos: dict):
         #Intenta
