@@ -41,7 +41,7 @@ class Basededatos:
             contenido.append(datos)
             #El contenido con los nuevos datos, se escribe en el archivo
             self.__escribir_archivo(contenido)
-            return True
+            return datos["id"]
         #Si falla retornamos  un false
         except:
             return False

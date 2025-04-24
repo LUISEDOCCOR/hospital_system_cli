@@ -36,7 +36,7 @@ def selecciona_elemento(datos: list, mensaje: str):
     else:
         alerta_error("No hay ningun elemento para realizar esta accion")
 
-def mostar_tabla(datos: list, tipo: str):
+def mostar_tabla(datos: list, tipo="elemento"):
     #https://www.datacamp.com/tutorial/python-tabulate
     if len(datos) > 0:
         print(tabulate(datos, headers="keys", tablefmt="fancy_grid", maxcolwidths=[None, 15]))

@@ -1,5 +1,6 @@
 from basededatos import Basededatos
 from textwrap import fill
+from datetime import date
 
 class EventoMedico:
     bd = Basededatos("eventomedico")
@@ -35,17 +36,16 @@ class EventoMedico:
         return cls.bd.obtener_por_clave_valor("tipo", tipo)
 
 class Consulta(EventoMedico):
-    def __init__(self, paciente_id, doctor_id, fecha, motivo, diagnostico):
-        super().__init__(paciente_id, doctor_id, fecha, motivo, tipo="consulta")
+    def __init__(self, paciente_id, doctor_id, motivo, diagnostico):
+        super().__init__(paciente_id=paciente_id, doctor_id=doctor_id, motivo=motivo, fecha=(date.today().isoformat()), tipo="consulta")
         self.diagnostico = diagnostico
-        self.motivo = motivo
 
     def obtener_todos(cls, tipo=None):
         return super().obtener_todos("consulta")
 
     def crear (self):
         datos = self.construir_datos()
-        datos["diagnostico"] = fill(self.diagnostico, 20)
+        datos["diagnostico"] = fill(self.diagnostico, 40)
         datos["motivo"] = fill(self.motivo, 20)
         return self.bd.crear(datos)
 
@@ -55,7 +55,7 @@ class Cita(EventoMedico):
     def __init__(self, paciente_id, doctor_id, fecha, motivo, estado, detalles):
         super().__init__(paciente_id, doctor_id, fecha, motivo, tipo="cita")
         self.estado = estado
-        self.detalles = detalles 
+        self.detalles = detalles
 
     def obtener_todos(cls, tipo=None):
         return super().obtener_todos("cita")
@@ -63,6 +63,7 @@ class Cita(EventoMedico):
     def crear (self):
         datos = self.construir_datos()
         datos["estado"] = self.estado
+        print("Creando")
         datos["detalles"] = fill(self.detalles, 20)
         datos["motivo"] = fill(self.motivo, 20)
         return self.bd.crear(datos)

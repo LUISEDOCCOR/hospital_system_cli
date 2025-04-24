@@ -53,17 +53,17 @@ pregutas_paciente = preguntas_personas + [
 pregutnas_evento_medico = [
     {
         "type": "input",
-        "message": "📅 Fecha de la cita (YYYY-MM-DD):",
-        "name": "fecha"
-    },
-    {
-        "type": "input",
-        "message": "📝 Motivo de la cita:",
+        "message": "📝 Motivo:",
         "name": "motivo"
     }
 ]
 
 preguntas_cita_medica = pregutnas_evento_medico + [
+      {
+        "type": "input",
+        "message": "📅 Fecha de la cita (YYYY-MM-DD):",
+        "name": "fecha"
+    },
     {
         "type": "list",
         "message": "📌 Estado de la cita:",
@@ -71,6 +71,9 @@ preguntas_cita_medica = pregutnas_evento_medico + [
         "name": "estado"
     }
 ]
+
+
+preguntas_consulta_medica = deepcopy(pregutnas_evento_medico) 
 
 def preguntas_persona_editar (valores_default: dict):
     nuevas_preguntas = deepcopy(preguntas_personas)

@@ -4,12 +4,11 @@ from InquirerPy import inquirer, prompt
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 import time
-from tabulate import tabulate
 from utilidades import limpiar_consola, centrar_texto, alerta_exito, alerta_error, alerta_confirmar, selecciona_elemento, mostar_tabla
-from preguntas import pregutas_doctor, pregutas_paciente, preguntas_persona_editar, preguntas_cita_medica
+from preguntas import pregutas_doctor, pregutas_paciente, preguntas_persona_editar, preguntas_cita_medica, preguntas_consulta_medica
 from personas import Doctor, Persona, Paciente
-from eventomedico import Cita
-from ia import ia_asistente_medico
+from eventomedico import Cita, Consulta
+from ia import ia_asistente_medico, ia_diagnostico_medico
 
 def menu_personas(tipo: str):
     while True:
@@ -79,32 +78,36 @@ def menu_personas(tipo: str):
                     alerta_error(f"No se encontro el {tipo}")
         input("Enter para continuar... ")
 
-def menu_agendar_cita():
+def menu_evento_medico():
+    pass    
+
+def menu_añadir_evento_medico(tipo: str):
     doctor_id = selecciona_elemento(Doctor.obtener_todos(), "Selecciona a un Doctor")
     paciente_id = selecciona_elemento(Paciente.obtener_todos(), "Seleccionar a un Paciente")
     if doctor_id and paciente_id:
-        respuestas = prompt(preguntas_cita_medica)
+        respuestas = prompt(preguntas_cita_medica if tipo == "cita" else preguntas_consulta_medica)
         respuestas["doctor_id"] = doctor_id
         respuestas["paciente_id"] = paciente_id
-        if alerta_confirmar("Usar IA para los detalles"):
-            respuestas["detalles"] = ia_asistente_medico(Paciente.obtener_por_id(paciente_id), respuestas["motivo"])
-            if alerta_confirmar("Agendar cita?"):
-                if Cita(**respuestas).crear():
-                    alerta_exito("Cita agendada correctamente")
-                    mostar_tabla([respuestas], "cita")
-                else:
-                    alerta_error()
+        if alerta_confirmar(f"Usar IA para {'detalles' if tipo == 'cita' else 'el diagnostico'}"):
+            if tipo == "cita":
+                respuestas["detalles"] = ia_asistente_medico(Paciente.obtener_por_id(paciente_id), respuestas["motivo"])
+            else:
+                respuestas["diagnostico"] = ia_diagnostico_medico(Paciente.obtener_por_id(paciente_id), respuestas["motivo"])
         else:
-            detalles = inquirer.text(message="Detalles de la cita: ").execute()
-            respuestas["detalles"] = detalles
+            if tipo == "cita":
+                respuestas["detalles"] = inquirer.text(message="Detalles de la cita: ").execute() 
+            else:
+                respuestas["diagnostico"] = inquirer.text(message="Diagostico: ").execute() 
+        if alerta_confirmar():
+            evento_id = Cita(**respuestas).crear() if tipo == "cita" else Consulta(**respuestas).crear()
+            if evento_id:
+                alerta_exito("Guardado correctamente")
+                mostar_tabla([Cita.obtener_por_id(evento_id)])
+            else:
+                alerta_error()
     else:
         alerta_error("Es necesario que exista un doctor o paciente")
 
-    input("Enter para continuar... ")
-
-
-def menu_consultas():
-    print("Consultas")
     input("Enter para continuar... ")
 
 def inicio():
@@ -140,6 +143,8 @@ def mostrar_menu():
             case 2:
                 menu_personas("paciente")
             case 3:
-                menu_agendar_cita()
+                menu_añadir_evento_medico("cita")
             case 4:
-                menu_consultas()
+                menu_añadir_evento_medico("consulta")
+            case 5:
+                menu_evento_medico()
