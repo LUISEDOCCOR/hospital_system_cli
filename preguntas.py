@@ -1,4 +1,5 @@
 from copy import deepcopy
+from datetime import date
 
 preguntas_personas = [
     {
@@ -67,7 +68,8 @@ preguntas_cita_medica = pregutnas_evento_medico + [
       {
         "type": "input",
         "message": "📅 Fecha de la cita (YYYY-MM-DD):",
-        "name": "fecha"
+        "name": "fecha",
+        "default": date.today().isoformat()
     },
     {
         "type": "list",

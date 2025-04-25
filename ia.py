@@ -29,8 +29,6 @@ def ia_asistente_medico(paciente: dict, sintomas: str):
                 {paciente}
 
                 - Síntomas reportados: {sintomas}
-
-                Texto generado:
             """)
     except:
         alerta_error()

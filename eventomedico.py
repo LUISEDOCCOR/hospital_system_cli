@@ -65,7 +65,6 @@ class Cita(EventoMedico):
     def crear (self):
         datos = self.construir_datos()
         datos["estado"] = self.estado
-        print("Creando")
         datos["detalles"] = fill(self.detalles, 20)
         datos["motivo"] = fill(self.motivo, 20)
         return self.bd.crear(datos)
