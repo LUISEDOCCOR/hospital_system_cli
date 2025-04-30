@@ -8,6 +8,7 @@ from utilidades import limpiar_consola, centrar_texto, alerta_exito, alerta_erro
 from preguntas import pregutas_doctor, pregutas_paciente, preguntas_persona_editar, preguntas_cita_medica, preguntas_consulta_medica, preguntas_eventomedico_editar
 from personas import Doctor, Persona, Paciente
 from eventomedico import Cita, Consulta, EventoMedico
+from basededatos import Basededatos
 from ia import ia_asistente_medico, ia_diagnostico_medico
 
 def menu_personas(tipo: str):
@@ -109,9 +110,9 @@ def menu_evento_medico():
             case 1:
                 mostar_tabla(datos, tipo)
             case 2:
-                evento_id = selecciona_elemento_eventomedico(datos, tipo) 
+                evento_id = selecciona_elemento_eventomedico(datos, tipo)
                 eventomedico = EventoMedico.obtener_por_id(evento_id)
-                if eventomedico:   
+                if eventomedico:
                     respuestas = prompt(preguntas_eventomedico_editar(eventomedico, tipo))
                     if alerta_confirmar():
                         if EventoMedico.editar(evento_id, respuestas):
@@ -119,11 +120,11 @@ def menu_evento_medico():
                         else:
                             alerta_error()
                 else:
-                    alerta_error(f"No se encontro la {tipo}")                
+                    alerta_error(f"No se encontro la {tipo}")
             case 3:
-                evento_id = selecciona_elemento_eventomedico(datos, tipo) 
+                evento_id = selecciona_elemento_eventomedico(datos, tipo)
                 eventomedico = EventoMedico.obtener_por_id(evento_id)
-                if eventomedico:   
+                if eventomedico:
                     mostar_tabla([eventomedico])
                 else:
                     alerta_error(f"No se encontro la {tipo}")
@@ -143,9 +144,9 @@ def menu_añadir_evento_medico(tipo: str):
                 respuestas["diagnostico"] = ia_diagnostico_medico(Paciente.obtener_por_id(paciente_id), respuestas["motivo"])
         else:
             if tipo == "cita":
-                respuestas["detalles"] = inquirer.text(message="Detalles de la cita: ").execute() 
+                respuestas["detalles"] = inquirer.text(message="Detalles de la cita: ").execute()
             else:
-                respuestas["diagnostico"] = inquirer.text(message="Diagostico: ").execute() 
+                respuestas["diagnostico"] = inquirer.text(message="Diagostico: ").execute()
         if alerta_confirmar():
             evento_id = Cita(**respuestas).crear() if tipo == "cita" else Consulta(**respuestas).crear()
             if evento_id:
@@ -165,6 +166,14 @@ def inicio():
     ])
     time.sleep(3)
 
+def borrar_basededatos():
+    limpiar_consola()
+    x = alerta_confirmar("Seguro de borrar base de datos")
+    if x:
+        Basededatos.borrar_todo()
+        print("Tendrás que volver a ejecutar el programa para crear nuevamente los archivos")
+    return x
+
 def mostrar_menu():
     while True:
         limpiar_consola()
@@ -177,6 +186,8 @@ def mostrar_menu():
                 Choice(value=3, name="📆 Agendar Cita"),
                 Choice(value=4, name="📁 Registrar Consulta"),
                 Choice(value=5, name="📕 Citas / Consultas"),
+                Separator(),
+                Choice(value=6, name="⛔️ Borrar todos los datos"),
                 Separator(),
                 Choice(value=None, name="📤 Salir"),
             ],
@@ -195,3 +206,6 @@ def mostrar_menu():
                 menu_añadir_evento_medico("consulta")
             case 5:
                 menu_evento_medico()
+            case 6:
+                if borrar_basededatos():
+                    break

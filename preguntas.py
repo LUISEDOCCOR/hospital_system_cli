@@ -80,7 +80,7 @@ preguntas_cita_medica = pregutnas_evento_medico + [
 ]
 
 
-preguntas_consulta_medica = deepcopy(pregutnas_evento_medico) 
+preguntas_consulta_medica = deepcopy(pregutnas_evento_medico)
 
 def preguntas_persona_editar (valores_default: dict, tipo):
     nuevas_preguntas = deepcopy(pregutas_doctor if tipo == "doctor" else pregutas_paciente)

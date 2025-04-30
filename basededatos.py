@@ -1,5 +1,5 @@
 #importar librerias
-import json, uuid, os
+import json, uuid, os, shutil
 
 class Basededatos:
     #Pedir como parámetro el nombre del archvio donde se guardaran los datos
@@ -30,6 +30,10 @@ class Basededatos:
             with open(self.archivo, "w") as archivo:
                 json.dump([], archivo)
 
+    @classmethod
+    def borrar_todo (cls):
+        if os.path.exists("./datos"):
+            shutil.rmtree("./datos")
 
     def crear(self, datos: dict):
         #Intenta
