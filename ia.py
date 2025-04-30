@@ -40,14 +40,14 @@ def ia_diagnostico_medico(paciente: dict, sintomas: str):
         with model.chat_session():
             #Prompt generado con chatgpt
             return model.generate(f"""
-                Eres un MÉDICO SIMULADO en un entorno educativo.
+                Eres un médico simulado en un entorno educativo.
+                Actúas como un asistente médico profesional.
+                Se te proporcionarán los síntomas y datos relevantes de un paciente.
+                Tu única tarea es generar un diagnóstico breve, de máximo 50 caracteres.
 
-                Eres un asistente médico profesional. Te daré los datos de un paciente y
-                sus síntomas.
-                Tu tarea es generar un diagnóstico breve (máximo 50 caracteres)
-                basado en los síntomas proporcionados.
+                Responde únicamente con el diagnóstico, sin explicaciones, sin repetir los datos del paciente y sin agregar ningún comentario adicional.
 
-                Responde SOLO con un diagnóstico corto, sin explicar ni repetir los datos del paciente. Usa texto claro y directo.
+                Usa lenguaje médico claro, directo y conciso.
 
                 DATOS DEL PACIENTE:
                 {paciente}

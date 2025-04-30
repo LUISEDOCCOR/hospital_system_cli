@@ -4,8 +4,10 @@ from InquirerPy import inquirer, prompt
 from InquirerPy.base.control import Choice
 from InquirerPy.separator import Separator
 import time
-from utilidades import limpiar_consola, centrar_texto, alerta_exito, alerta_error, alerta_confirmar, selecciona_elemento_personas, mostar_tabla, selecciona_elemento_eventomedico
-from preguntas import pregutas_doctor, pregutas_paciente, preguntas_persona_editar, preguntas_cita_medica, preguntas_consulta_medica, preguntas_eventomedico_editar
+from utilidades import limpiar_consola, centrar_texto, alerta_exito, alerta_error, alerta_confirmar, \
+selecciona_elemento_personas, mostar_tabla, selecciona_elemento_eventomedico
+from preguntas import pregutas_doctor, pregutas_paciente, preguntas_persona_editar, preguntas_cita_medica, \
+preguntas_consulta_medica, preguntas_eventomedico_editar
 from personas import Doctor, Persona, Paciente
 from eventomedico import Cita, Consulta, EventoMedico
 from basededatos import Basededatos
