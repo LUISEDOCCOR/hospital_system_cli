@@ -41,8 +41,8 @@ def selecciona_elemento_eventomedico(datos: list, tipo: str):
     if len(datos) > 0:
         return inquirer.fuzzy(
             message = f"Selecciona una {tipo}",
-            choices=[Choice(value=elemento["id"], 
-                name=f"🥼 Doctor: {Doctor.obtener_por_id(elemento["doctor_id"])["nombre"]} 👤 Paciente: {Paciente.obtener_por_id(elemento["paciente_id"])["nombre"]} 📆 Fecha: {elemento["fecha"]}") 
+            choices=[Choice(value=elemento["id"],
+                name=f"🥼 Doctor: {Doctor.obtener_por_id(elemento["doctor_id"])["nombre"]} 👤 Paciente: {Paciente.obtener_por_id(elemento["paciente_id"])["nombre"]} 📆 Fecha: {elemento["fecha"]}")
                 for elemento in datos
             ]
         ).execute()
@@ -52,6 +52,6 @@ def selecciona_elemento_eventomedico(datos: list, tipo: str):
 def mostar_tabla(datos: list, tipo="elemento"):
     #https://www.datacamp.com/tutorial/python-tabulate
     if len(datos) > 0:
-        print(tabulate(datos, headers="keys", tablefmt="fancy_grid", maxcolwidths=[None, 15]))
+        print(tabulate(datos, headers="keys", tablefmt="fancy_grid"))
     else:
         alerta_error(f"No hay ningun {tipo} registrado")

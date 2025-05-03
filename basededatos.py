@@ -1,3 +1,6 @@
+"""
+En este módulo está la clase Basededatos la cual te ayuda a interactuar con archivos JSON
+"""
 #importar librerias
 import json, uuid, os, shutil
 

@@ -50,8 +50,6 @@ class Consulta(EventoMedico):
         datos["motivo"] = fill(self.motivo, 20)
         return self.bd.crear(datos)
 
-
-
 class Cita(EventoMedico):
     def __init__(self, paciente_id, doctor_id, fecha, motivo, estado, detalles):
         super().__init__(paciente_id, doctor_id, fecha, motivo, tipo="cita")
