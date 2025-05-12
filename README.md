@@ -2,7 +2,7 @@
 Proyecto final de programación (2 semestre). Una aplicación en línea de comandos (CLI) para gestionar eventos médicos como consultas y citas, con almacenamiento local en archivos JSON.
 
 ## 🧠 Descripción
-Este sistema permite registrar, consultar, editar y eliminar eventos médicos como consultas o citas, incluyendo diagnósticos generados por IA. También implementa conceptos clave como Programación Orientada a Objetos (POO), módulos y manejo de archivos.
+Este sistema permite registrar, consultar, editar y eliminar eventos médicos como consultas o citas, incluyendo diagnósticos generados por IA.
 
 ## ⚙️ Tecnologías usadas
 Python 3
@@ -19,8 +19,6 @@ python3 main.py
 - Registrar pacientes, doctores y eventos médicos.
 - Generar diagnósticos automáticos a partir de síntomas.
 - Editar, eliminar y consultar registros.
-
-##### Todo desde una terminal interactiva.
 
 Los datos se guardan automáticamente en la carpeta ./datos/
 
