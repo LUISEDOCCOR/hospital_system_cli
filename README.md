@@ -1,8 +1,4 @@
 # 🩺 Sistema de Gestión Médica CLI
-Proyecto final de programación (2 semestre). Una aplicación en línea de comandos (CLI) para gestionar eventos médicos como consultas y citas, con almacenamiento local en archivos JSON.
-
-## 🧠 Descripción
-Este sistema permite registrar, consultar, editar y eliminar eventos médicos como consultas o citas, incluyendo diagnósticos generados por IA.
 
 ## ⚙️ Tecnologías usadas
 Python 3
